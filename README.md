@@ -9,3 +9,9 @@ remove(key) to delete items from the cache
 clear() to empty the cache
 size() to check the number of items stored
 containsKey(key) to verify if a key exists in the cache
+
+Creational Design Patterns Used:
+Singleton: Ensures only one cache instance exists.
+Prototype: Allows cloning cache elements efficiently.
+Builder: Provides flexible configuration (capacity, expiration, etc.).
+Factory/Abstract Factory: Creates different types of caches without changing client code.
