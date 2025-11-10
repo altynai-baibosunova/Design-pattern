@@ -3,53 +3,67 @@ import java.util.Map;
 
 public class LRUCache {
 
-    private final int capasity;
+    private final int capacity;
     private final Map<String, Integer> cache;
 
-   //constructor
-    public LRUCache(int capasity){
-        this.capasity = capasity;
-        this.cache = new LinkedHashMap<>(capasity, 0.75f, true);
-
+    // Constructor
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        // Create an anonymous subclass of LinkedHashMap to override removeEldestEntry
+        this.cache = new LinkedHashMap<String, Integer>(capacity, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, Integer> eldest) {
+                // Remove the eldest entry when size exceeds capacity
+                return size() > LRUCache.this.capacity;
+            }
+        };
     }
 
-    public void put(String key, int value){
-        cache.put(key,value);
+    // Add or update a key-value pair
+    public void put(String key, int value) {
+        cache.put(key, value);
     }
 
-    public int get(String key){
+    // Get the value for a key, or -1 if not present
+    public int get(String key) {
         return cache.getOrDefault(key, -1);
     }
 
-    public void remove(String key){
+    // Remove a specific key
+    public void remove(String key) {
         cache.remove(key);
     }
-    public void clear(){
+
+    // Clear the cache
+    public void clear() {
         cache.clear();
     }
 
-    public int size(){
-       return cache.size();
+    // Get current cache size
+    public int size() {
+        return cache.size();
     }
 
-    public boolean containsKey(String key){
+    // Check if key exists
+    public boolean containsKey(String key) {
         return cache.containsKey(key);
     }
 
-    public void printCache(){
+    // Print the cache content
+    public void printCache() {
         System.out.println(cache);
-
     }
 
+    // Simple main to test
+    public static void main(String[] args) {
+        LRUCache lru = new LRUCache(3);
+        lru.put("A", 1);
+        lru.put("B", 2);
+        lru.put("C", 3);
+        lru.printCache(); // {A=1, B=2, C=3}
 
+        lru.get("A");     // Access A, now order: B, C, A
+        lru.put("D", 4);  // Evicts B (least recently used)
+        lru.printCache(); // {C=3, A=1, D=4}
+    }
 }
-//1. Cache key is string
-//2. Cache value is integer
-//3. Implement functions of cache
-//a. void put(string key, int value)
-//b. int get(string key)
-//c. void remove(string key)
-//d. optional: i. void clear()
-             //ii. int size()
-            //iii. boolean containsKey(string key)
-//4. implement FIFO(first-in first-out) or LRU(least recently used) or LFU(least frequently used)
